@@ -76,14 +76,14 @@ class Product implements UserOwnedInterface
 
     #[ORM\Column(type: 'datetime')]
     #[Groups([
-      'Product:collection:get',
+      'Auth:get',
       'Category:item:get'
     ])]
     private $createdAt;
 
     #[ORM\Column(type: 'datetime', nullable: true)]
     #[Groups([
-      'Product:collection:get',
+      'Auth:get',
       'Category:item:get'
     ])]
     private $updatedAt;

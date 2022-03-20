@@ -60,14 +60,14 @@ class Category implements UserOwnedInterface
 
   #[ORM\Column(type: 'datetime')]
   #[Groups([
-      'Category:collection:get',
+      'Auth:get',
       'Product:item:get'
     ])]
     private $createdAt;
 
     #[ORM\Column(type: 'datetime', nullable: true)]
     #[Groups([
-      'Category:collection:get',
+      'Auth:get',
       'Product:item:get'
     ])]
     private $updatedAt;
