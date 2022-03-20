@@ -12,11 +12,38 @@ use Symfony\Component\Validator\Constraints as Assert;
     'post'
   ],
   itemOperations: [
-    'get',
-    'put',
-    'delete'
+    'get' => [
+      'security' => "is_granted('ROLE_USER')",
+      'openapi_context' => [
+        'security' => [
+          [
+            'bearerAuth' => []
+          ]
+        ]
+      ]
+    ],
+    'put' => [
+      'security' => "is_granted('ROLE_USER')",
+      'openapi_context' => [
+        'security' => [
+          [
+            'bearerAuth' => []
+          ]
+        ]
+      ]
+    ],
+    'delete' => [
+      'security' => "is_granted('ROLE_USER')",
+      'openapi_context' => [
+        'security' => [
+          [
+            'bearerAuth' => []
+          ]
+        ]
+      ]
+    ]
   ],
-  paginationEnabled: false
+  paginationEnabled: false,
 )]
 class Dependency
 {

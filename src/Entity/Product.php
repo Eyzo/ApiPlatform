@@ -6,6 +6,7 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Bridge\Doctrine\Common\Filter\SearchFilterInterface;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use App\Controller\ProductsPublishController;
+use App\Interface\UserOwnedInterface;
 use App\Repository\ProductRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -44,7 +45,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 )]
 #[ApiFilter(SearchFilter::class, properties: ['name' => SearchFilterInterface::STRATEGY_PARTIAL])]
 #[ORM\HasLifecycleCallbacks]
-class Product
+class Product implements UserOwnedInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -99,6 +100,9 @@ class Product
       'Product:item:get',
     ])]
     private $publish;
+
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'products')]
+    private $user;
 
     public function getId(): ?int
     {
@@ -186,6 +190,18 @@ class Product
     public function setPublish(bool $publish): self
     {
         $this->publish = $publish;
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
+
         return $this;
     }
 }
