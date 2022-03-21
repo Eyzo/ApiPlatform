@@ -5,10 +5,12 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Bridge\Doctrine\Common\Filter\SearchFilterInterface;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use App\Controller\ProductImgController;
 use App\Controller\ProductsPublishController;
 use App\Interface\UserOwnedInterface;
 use App\Repository\ProductRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -16,7 +18,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiResource(
   collectionOperations: [
     'get' => ['normalization_context' => ['groups' => ['Product:collection:get']]],
-    'post' => ['denormalization_context'=> ['groups' => ['Product:collection:post']]]
+    'post' => ['denormalization_context'=> ['groups' => ['Product:collection:post']]],
   ],
   itemOperations: [
     'get' => ['normalization_context' => ['groups' => ['Product:collection:get', 'Product:item:get']]],
@@ -39,6 +41,13 @@ use Symfony\Component\Validator\Constraints as Assert;
           ]
         ]
       ]
+    ],
+    'img' => [
+      'method' => 'post',
+      'path' => '/products/{id}/file',
+      'controller' => ProductImgController::class,
+      'deserialize' => false,
+      'normalization_context' => ['groups' => ['Product:item:get']]
     ]
   ],
   paginationEnabled: false
@@ -103,6 +112,14 @@ class Product implements UserOwnedInterface
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'products')]
     private $user;
+
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    #[Groups([
+      'Product:item:get',
+    ])]
+    private $img;
+
+    private ?File $imgFile;
 
     public function getId(): ?int
     {
@@ -204,4 +221,35 @@ class Product implements UserOwnedInterface
 
         return $this;
     }
+
+    public function getImg(): ?string
+    {
+        return $this->img;
+    }
+
+    public function setImg(?string $img): self
+    {
+        $this->img = $img;
+
+        return $this;
+    }
+
+    /**
+     * @return File|null
+     */
+    public function getImgFile(): ?File
+    {
+      return $this->imgFile;
+    }
+
+    /**
+     * @param File|null $imgFile
+     * @return Product
+     */
+    public function setImgFile(?File $imgFile): Product
+    {
+      $this->imgFile = $imgFile;
+      return $this;
+    }
+
 }

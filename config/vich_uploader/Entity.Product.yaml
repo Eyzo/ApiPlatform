@@ -1,0 +1,4 @@
+App\Entity\Product:
+  imgFile:
+    mapping: products
+    filename_property: img
