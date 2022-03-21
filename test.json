@@ -31,7 +31,8 @@
         "symfony/validator": "6.0.*",
         "symfony/yaml": "6.0.*",
         "Test": "5.0.1",
-        "New": "6.0.3"
+        "New": "6.0.3",
+        "ok": "8.0.2"
     },
     "config": {
         "allow-plugins": {

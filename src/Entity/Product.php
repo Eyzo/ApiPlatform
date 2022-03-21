@@ -5,6 +5,7 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Bridge\Doctrine\Common\Filter\SearchFilterInterface;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use App\Controller\EmptyController;
 use App\Controller\ProductImgController;
 use App\Controller\ProductsPublishController;
 use App\Interface\UserOwnedInterface;
@@ -45,9 +46,8 @@ use Symfony\Component\Validator\Constraints as Assert;
     'img' => [
       'method' => 'post',
       'path' => '/products/{id}/file',
-      'controller' => ProductImgController::class,
-      'deserialize' => false,
-      'normalization_context' => ['groups' => ['Product:item:get']]
+      'controller' => EmptyController::class,
+      'normalization_context' => ['groups' => ['Product:collection:get', 'Product:item:get']]
     ]
   ],
   paginationEnabled: false
@@ -119,7 +119,7 @@ class Product implements UserOwnedInterface
     ])]
     private $img;
 
-    private ?File $imgFile;
+    private ?File $imgFile = null;
 
     public function getId(): ?int
     {
